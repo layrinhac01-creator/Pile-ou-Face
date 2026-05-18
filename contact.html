@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jeu du Pile ou Face - À propos</title>
+    <title>Jeu du Pile ou Face - Contact</title>
     <style>
         /* --- STYLES GENERAUX DE LA PAGE --- */
         body {
@@ -67,7 +67,7 @@
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             text-align: center;
-            max-width: 550px;
+            max-width: 400px;
             width: 100%;
             box-sizing: border-box;
         }
@@ -76,15 +76,30 @@
             margin-top: 0;
             color: #2d3748;
             font-size: 2rem;
+            margin-bottom: 25px;
         }
 
-        p {
+        /* --- ZONE DES INFORMATIONS PERSONNELLES --- */
+        .info-card {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 20px;
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        .info-line {
+            margin-bottom: 12px;
+            font-size: 1.05rem;
             color: #4a5568;
-            line-height: 1.6;
-            margin-bottom: 10px;
-            text-align: justify;
         }
 
+        .info-line strong {
+            color: #2d3748;
+            display: inline-block;
+            width: 110px; /* On passe de 90px à 110px pour donner de la place */
+        }
         /* --- BLOC COMMENTAIRES (ASIDE) --- */
         aside {
             margin-top: 25px;
@@ -128,9 +143,13 @@
 
     <main>
         <article>
-            <h1>À propos de nous</h1>
-            <p>Bienvenue sur l'application web du Jeu du Pile ou Face, entièrement conçue et développée dans le cadre de la formation Holberton School.</p>
-            <p>Ce projet met en avant l'utilisation des technologies fondamentales du web (HTML5, CSS3 pour la gestion de l'affichage tridimensionnel, et JavaScript pour la logique algorithmique) afin d'offrir une expérience utilisateur fluide, propre et dénuée d'éléments superflus.</p>
+            <h1>Contact</h1>
+            
+            <div class="info-card">
+                <div class="info-line"><strong>Nom :</strong> Ayrinhac</div>
+                <div class="info-line"><strong>Prénom :</strong> Loïc</div>
+                <div class="info-line"><strong>Téléphone :</strong> 06 13 85 23 96</div>
+            </div>
         </article>
 
         <aside>
@@ -139,7 +158,7 @@
     </main>
 
     <footer>
-        <p>Réalisé par Loïc Avrinhac pour <a href="https://apply.holbertonschool.com" target="_blank">Holberton School</a></p>
+        <p>Réalisé par Loïc Ayrinhac pour <a href="https://apply.holbertonschool.com" target="_blank">Holberton School</a></p>
     </footer>
 
 </body>

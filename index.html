@@ -1,357 +1,300 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Casino Royal - Roulette de Prestige</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeu du Pile ou Face</title>
     <style>
-        :root {
-            --green-carpet: radial-gradient(circle at 50% 50%, #1c5230 0%, #0c2b17 60%, #05140a 100%);
-            --gold-gradient: linear-gradient(135deg, #ffe066 0%, #f1c40f 40%, #b38f00 70%, #665200 100%);
-            --wood-border: #331f14;
-        }
-
+        /* --- BASES DE LA PAGE --- */
         body {
-            background: var(--green-carpet);
-            color: white;
-            font-family: 'Playfair Display', 'Georgia', serif;
+            background-color: #f4f6f9;
+            color: #333;
+            font-family: Arial, sans-serif;
             margin: 0;
-            min-height: 100vh;
+            padding: 0;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
-            position: relative;
+            min-height: 100vh;
+        }
+
+        /* --- LIEN TOP OBLIGATOIRE --- */
+        .top-link {
+            text-align: center;
+            padding: 10px;
+            background-color: #e2e8f0;
+        }
+        .top-link a {
+            color: #4a5568;
+            font-weight: bold;
+            text-decoration: none;
         }
 
         /* --- NAVIGATION --- */
         header {
-            background: rgba(0, 0, 0, 0.6);
-            padding: 15px 20px;
-            border-bottom: 2px solid #b38f00;
-            z-index: 100;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            background-color: #2d3748;
+            padding: 15px;
         }
-        header ul { list-style: none; margin: 0; padding: 0; display: flex; justify-content: center; gap: 40px; }
+        header ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
         header ul li a {
-            color: #f1c40f; text-decoration: none; font-weight: bold; text-transform: uppercase;
-            letter-spacing: 3px; font-family: sans-serif; font-size: 0.85rem; transition: all 0.3s;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
         }
-        header ul li a:hover { color: white; text-shadow: 0 0 10px #f1c40f; }
+        header ul li a:hover {
+            color: #cbd5e0;
+        }
 
+        /* --- CADRE DU JEU --- */
         main {
             flex: 1;
-            display: flex;
-            position: relative;
-            padding: 10px;
-            box-sizing: border-box;
-            align-items: center;
-            justify-content: center;
-        }
-
-        article {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            padding: 20px;
+        }
+
+        article {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 350px;
             width: 100%;
-            z-index: 10;
+            box-sizing: border-box;
         }
 
-        h1 {
-            font-size: 3rem;
-            text-transform: uppercase;
-            letter-spacing: 8px;
-            background: var(--gold-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(3px 3px 4px rgba(0,0,0,0.7));
-            margin: 0 0 5px 0;
-            animation: goldGlow 3s ease-in-out infinite alternate;
+        h2 {
+            margin-top: 0;
+            color: #2d3748;
         }
 
-        @keyframes goldGlow {
-            0% { filter: drop-shadow(0 0 5px rgba(241,196,15,0.3)) drop-shadow(2px 2px 2px rgba(0,0,0,0.7)); }
-            100% { filter: drop-shadow(0 0 20px rgba(241,196,15,0.7)) drop-shadow(2px 2px 2px rgba(0,0,0,0.7)); }
+        /* --- VISUEL DE LA PIECE --- */
+        .coin-container {
+            perspective: 1000px;
+            margin: 30px auto;
+            width: 120px;
+            height: 120px;
         }
 
-        #display {
-            font-size: 2.2rem;
-            font-weight: bold;
-            margin-bottom: 15px;
-            height: 60px;
-            color: #f1c40f;
-            text-shadow: 0 0 20px rgba(241, 196, 15, 0.6);
-            background: rgba(0,0,0,0.6);
-            padding: 5px 45px;
-            border-radius: 50px;
-            border: 2px solid #b38f00;
+        .coin {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.3, 1);
+        }
+
+        .coin-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            backface-visibility: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5), inset 0 0 15px rgba(0,0,0,0.5);
+            font-weight: bold;
+            font-size: 1.3rem;
+            border: 4px solid #cbd5e0;
+            box-sizing: border-box;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1), 0 4px 8px rgba(0,0,0,0.1);
         }
 
-        /* --- HISTORIQUE --- */
-        .history-container {
+        /* Face "FACE" (Argentée) */
+        .coin-face.face {
+            background-color: #e2e8f0;
+            color: #4a5568;
+            transform: rotateY(0deg);
+        }
+
+        /* Face "PILE" (Dorée) */
+        .coin-face.pile {
+            background-color: #f6ad55;
+            color: #744210;
+            border-color: #ed8936;
+            transform: rotateY(180deg);
+        }
+
+        /* --- TEXTE DU RESULTAT --- */
+        .result {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin: 20px 0;
+            min-height: 30px;
+            color: #2d3748;
+        }
+
+        /* --- BOUTON DE LANCER --- */
+        .btn {
+            background-color: #3182ce;
+            color: #fff;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.2s;
+            margin-bottom: 25px;
+        }
+        .btn:hover {
+            background-color: #2b6cb0;
+        }
+        .btn:disabled {
+            background-color: #cbd5e0;
+            cursor: not-allowed;
+        }
+
+        /* --- ZONE HISTORIQUE --- */
+        .history-box {
+            border-top: 1px solid #e2e8f0;
+            padding-top: 15px;
+        }
+        .history-title {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #718096;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        .history-list {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            min-height: 28px;
+        }
+        .history-badge {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 25px;
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.4));
-            padding: 8px 25px;
-            border-radius: 50px;
-            border: 1px solid rgba(241, 196, 15, 0.2);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.85rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            animation: fadeIn 0.3s ease-out;
         }
-        .history-label {
-            font-family: sans-serif; font-size: 0.8rem; text-transform: uppercase;
-            letter-spacing: 2px; color: #d4af37; font-weight: bold;
+        .badge-pile {
+            background-color: #f6ad55;
+            color: #744210;
+            border: 1px solid #ed8936;
         }
-        #history-list { display: flex; gap: 10px; }
-        .history-item {
-            width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center;
-            justify-content: center; font-family: Arial, sans-serif; font-size: 0.9rem;
-            font-weight: bold; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.6);
-            border: 1px solid rgba(255,255,255,0.2); animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        .badge-face {
+            background-color: #e2e8f0;
+            color: #4a5568;
+            border: 1px solid #cbd5e0;
         }
 
-        /* --- AMBIANCE CASINO (LES DECORS CSS) --- */
-        
-        /* Les Jetons empilés (Chips) */
-        .chips-stack {
-            position: absolute;
-            z-index: 2;
-            display: flex;
-            flex-direction: column-reverse;
-            filter: drop-shadow(5px 10px 10px rgba(0,0,0,0.6));
-        }
-        .chip {
-            width: 50px; height: 12px;
-            border-radius: 50%;
-            margin-top: -6px;
-            border: 2px dashed rgba(255,255,255,0.4);
-            box-shadow: inset 0 2px 4px rgba(255,255,255,0.5), inset 0 -4px 5px rgba(0,0,0,0.4);
-            position: relative;
-        }
-        .chip::after {
-            content: ""; position: absolute; top: 2px; left: 10px; right: 10px; bottom: 2px;
-            border-radius: 50%; border: 1px dotted white;
-        }
-        .stack-blue { left: 10%; top: 20%; }
-        .stack-blue .chip { background: #2980b9; }
-        .stack-red { left: 14%; top: 23%; }
-        .stack-red .chip { background: #c0392b; }
-        .stack-gold { right: 15%; top: 15%; }
-        .stack-gold .chip { background: #d4af37; }
-
-        /* Le Verre de Cocktail (à droite) */
-        .vip-glass {
-            position: absolute; right: 8%; bottom: 15%;
-            width: 80px; height: 120px; z-index: 2;
-            background: linear-gradient(60deg, rgba(255,255,255,0.4) 0%, rgba(255,150,0,0.3) 40%, rgba(255,255,255,0.1) 100%);
-            clip-path: polygon(0 0, 100% 0, 60% 70%, 60% 95%, 80% 95%, 80% 100%, 20% 100%, 20% 95%, 40% 95%, 40% 70%);
-            filter: drop-shadow(10px 15px 10px rgba(0,0,0,0.5));
-        }
-        /* L'olive dans le verre */
-        .vip-glass::after {
-            content: ""; position: absolute; top: 30px; left: 35px;
-            width: 16px; height: 22px; background: #789262;
-            border-radius: 50%; transform: rotate(30deg);
-            box-shadow: inset -2px -2px 5px black;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
         }
 
-        /* Râteau du Croupier (à gauche) */
-        .rake-decor {
-            position: absolute; left: 4%; bottom: 10%;
-            width: 140px; height: 200px; z-index: 1; opacity: 0.4;
-            border-top: 10px solid #1a0f0a;
-            border-left: 4px solid #1a0f0a; border-right: 4px solid #1a0f0a;
-            background: repeating-linear-gradient(90deg, transparent, transparent 15px, #1a0f0a 15px, #1a0f0a 20px);
-            transform: rotate(25deg);
-        }
-
-        /* Cartes & Dés existants */
-        .deck-decor { position: absolute; left: 4%; top: 48%; transform: translateY(-50%); width: 200px; height: 250px; z-index: 1; pointer-events: none; opacity: 0.6; }
-        .decor-card { position: absolute; width: 110px; height: 160px; background: white; border-radius: 8px; box-shadow: 5px 5px 15px rgba(0,0,0,0.6); display: flex; flex-direction: column; justify-content: space-between; padding: 10px; box-sizing: border-box; font-family: Arial, sans-serif; font-weight: bold; }
-        .card-back { background: #990000; border: 4px solid white; box-shadow: inset 0 0 10px black; }
-        .card1 { transform: rotate(-25deg); left: 0; top: 30px; }
-        .card2 { transform: rotate(-8deg); left: 30px; top: 10px; }
-        .card3 { transform: rotate(12deg); left: 60px; top: 0; color: #c0392b; }
-        .card-suit { font-size: 2rem; text-align: center; }
-
-        .dice-decor { position: absolute; right: 6%; top: 42%; z-index: 1; pointer-events: none; opacity: 0.6; }
-        .decor-die { position: absolute; width: 42px; height: 42px; background: #c0392b; border-radius: 6px; box-shadow: 3px 5px 12px rgba(0,0,0,0.7), inset -3px -3px 5px rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; font-size: 1.7rem; color: white; }
-        .die1 { transform: rotate(12deg); left: 0; top: 0; }
-        .die2 { transform: rotate(-35deg); left: 45px; top: 35px; background: #961910; }
-
-        /* --- STRUCTURE DE LA ROULETTE --- */
-        .casino-table {
-            position: relative;
-            padding: 30px;
-            background: linear-gradient(135deg, #2b160a 0%, #140b05 100%);
-            border-radius: 50%;
-            box-shadow: 0 30px 70px rgba(0,0,0,0.9), inset 0 0 40px rgba(0,0,0,0.8), 0 0 0 8px rgba(241,196,15,0.15);
-            border: 16px solid #0f0703;
-        }
-
-        .roulette-wrapper {
-            position: relative;
-            width: 450px;
-            height: 450px;
-            border: 18px solid var(--wood-border);
-            border-radius: 50%;
-            box-shadow: inset 0 0 30px rgba(0,0,0,0.9), 0 4px 10px rgba(0,0,0,0.5);
-            background: #111;
-        }
-
-        /* Lustre lumineux sur le vernis du bois */
-        .roulette-wrapper::before {
-            content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            border-radius: 50%;
-            background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 40%, transparent 60%, rgba(0,0,0,0.6) 100%);
-            z-index: 30; pointer-events: none;
-        }
-
-        .arrow {
-            position: absolute;
-            top: -30px; left: 50%; transform: translateX(-50%);
-            width: 0; height: 0;
-            border-left: 22px solid transparent; border-right: 22px solid transparent;
-            border-top: 48px solid #f1c40f;
-            z-index: 100;
-            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.7));
-        }
-
-        .center-hub {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 96px; height: 96px; background: var(--gold-gradient);
-            border-radius: 50%; z-index: 25;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.7), inset 0 2px 6px rgba(255,255,255,0.6);
-            border: 2px solid #554008;
-        }
-        .center-hub::after {
-            content: ""; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 34px; height: 34px; background: #665200; border-radius: 50%;
-            box-shadow: inset 0 3px 6px rgba(0,0,0,0.6), 0 2px 3px rgba(255,255,255,0.2);
-        }
-
-        #wheel {
-            width: 100%; height: 100%; border-radius: 50%; position: relative;
-            transform: rotate(-4.86deg);
-            transition: transform 6s cubic-bezier(0.15, 0, 0.05, 1);
-            background: conic-gradient(
-                #27ae60 0deg 9.73deg, #c0392b 9.73deg 19.46deg, #1a1a1a 19.46deg 29.19deg,
-                #c0392b 29.19deg 38.92deg, #1a1a1a 38.92deg 48.65deg, #c0392b 48.65deg 58.38deg,
-                #1a1a1a 58.38deg 68.11deg, #c0392b 68.11deg 77.84deg, #1a1a1a 77.84deg 87.57deg,
-                #c0392b 87.57deg 97.3deg, #1a1a1a 97.3deg 107.03deg, #c0392b 107.03deg 116.76deg,
-                #1a1a1a 116.76deg 126.49deg, #c0392b 126.49deg 136.22deg, #1a1a1a 136.22deg 145.95deg,
-                #c0392b 145.95deg 155.68deg, #1a1a1a 155.68deg 165.41deg, #c0392b 165.41deg 175.14deg,
-                #1a1a1a 175.14deg 184.87deg, #c0392b 184.87deg 194.6deg, #1a1a1a 194.6deg 204.33deg,
-                #c0392b 204.33deg 214.06deg, #1a1a1a 214.06deg 223.79deg, #c0392b 223.79deg 233.52deg,
-                #1a1a1a 233.52deg 243.25deg, #c0392b 243.25deg 252.98deg, #1a1a1a 252.98deg 262.71deg,
-                #c0392b 262.71deg 272.44deg, #1a1a1a 272.44deg 282.17deg, #c0392b 282.17deg 291.9deg,
-                #1a1a1a 291.9deg 301.63deg, #c0392b 301.63deg 311.36deg, #1a1a1a 311.36deg 321.09deg,
-                #c0392b 321.09deg 330.82deg, #1a1a1a 330.82deg 340.55deg, #c0392b 340.55deg 350.28deg,
-                #1a1a1a 350.28deg 360deg
-            );
-        }
-
-        .number-label {
-            position: absolute; top: 0; left: 50%; width: 30px; height: 50%; margin-left: -15px;
-            transform-origin: bottom center; display: flex; justify-content: center; padding-top: 16px;
-            box-sizing: border-box; font-weight: bold; font-size: 14px; font-family: Arial, sans-serif;
-            color: rgba(255, 255, 255, 0.95); text-shadow: 1px 1px 2px black;
-        }
-
-        /* Le Bouton de tirage */
-        button {
-            margin-top: 35px; padding: 18px 60px; font-size: 1.5rem; cursor: pointer;
-            background: var(--gold-gradient); color: #1a0f0a; border: none; border-radius: 6px;
-            font-weight: 900; text-transform: uppercase; letter-spacing: 3px;
-            box-shadow: 0 10px 0 #665200, 0 20px 35px rgba(0,0,0,0.6); transition: all 0.1s;
-        }
-        button:hover { filter: brightness(1.15); }
-        button:active { transform: translateY(6px); box-shadow: 0 4px 0 #665200, 0 10px 15px rgba(0,0,0,0.6); }
-        button:disabled { filter: grayscale(0.8); opacity: 0.5; transform: translateY(6px); box-shadow: none; cursor: not-allowed; }
-
+        /* --- BLOC BAS DE PAGE & LIEN SUPPLÉMENTAIRE --- */
         aside {
-            position: absolute; bottom: 20px; right: 20px; background: rgba(0, 0, 0, 0.7);
-            padding: 10px 15px; border-radius: 5px; font-family: sans-serif; font-size: 0.8rem;
-            border: 1px solid rgba(255,255,255,0.1); color: #bbb; z-index: 10;
+            margin-top: 25px;
+            font-size: 0.85rem;
+            color: #a0aec0;
+            text-align: center;
+        }
+
+        .bottom-link-container {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .bottom-school-link {
+            display: inline-block;
+            color: #3182ce;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 8px 16px;
+            background-color: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: all 0.2s;
+        }
+
+        .bottom-school-link:hover {
+            color: #2b6cb0;
+            background-color: #edf2f7;
+            border-color: #cbd5e0;
         }
 
         footer {
-            background: rgba(0, 0, 0, 0.9); text-align: center; padding: 15px;
-            font-family: sans-serif; font-size: 0.9rem; border-top: 2px solid #2b160a; color: #bbb; z-index: 100;
+            background-color: #1a202c;
+            color: #fff;
+            text-align: center;
+            padding: 15px;
+            font-size: 0.9rem;
         }
-        footer a { color: #f1c40f; text-decoration: none; font-weight: bold; }
-        footer a:hover { text-decoration: underline; }
+        footer a {
+            color: #63b3ed;
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
 
+    <div class="top-link">
+        <a href="https://layrinhac01-creator.github.io/Mon-site-HolbertonSchool/" target="_blank">🌐 Accéder au site Holberton School</a>
+    </div>
+
     <header>
         <nav>
             <ul>
-                <li><a href="index.html">Accueil / Roulette</a></li>
+                <li><a href="index.html">Accueil</a></li>
                 <li><a href="tweets.html">Tweets</a></li>
+                <li><a href="apropos.html">À propos</a></li>
                 <li><a href="contact.html">Contact</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
-        <div class="chips-stack stack-blue">
-            <div class="chip"></div><div class="chip"></div><div class="chip"></div><div class="chip"></div><div class="chip"></div>
-        </div>
-        <div class="chips-stack stack-red">
-            <div class="chip"></div><div class="chip"></div><div class="chip"></div><div class="chip"></div><div class="chip"></div><div class="chip"></div>
-        </div>
-        <div class="chips-stack stack-gold">
-            <div class="chip"></div><div class="chip"></div><div class="chip"></div><div class="chip"></div>
-        </div>
-
-        <div class="vip-glass"></div>
-
-        <div class="rake-decor"></div>
-
-        <div class="deck-decor">
-            <div class="decor-card card-back card1"></div>
-            <div class="decor-card card-back card2"></div>
-            <div class="decor-card card3">
-                <div>A</div><div class="card-suit">♦</div><div style="transform: rotate(180deg);">A</div>
-            </div>
-        </div>
-
-        <div class="dice-decor">
-            <div class="decor-die die1">⚄</div>
-            <div class="decor-die die2">⚂</div>
-        </div>
-
         <article>
-            <h1>ROULETTE ROYALE</h1>
-            
-            <div id="display">Faites vos jeux !</div>
+            <h2>Jeu du Pile ou Face</h2>
 
-            <div class="history-container">
-                <span class="history-label">Historique :</span>
-                <div id="history-list"></div>
-            </div>
-
-            <div class="casino-table">
-                <div class="roulette-wrapper">
-                    <div class="arrow"></div>
-                    <div class="center-hub"></div>
-                    <div id="wheel"></div>
+            <div class="coin-container">
+                <div class="coin" id="coin">
+                    <div class="coin-face face">FACE</div>
+                    <div class="coin-face pile">PILE</div>
                 </div>
             </div>
 
-            <button id="spinBtn" onclick="spin()">SPIN</button>
+            <div class="result" id="result">Cliquez pour jouer !</div>
+
+            <button class="btn" id="flipBtn" onclick="flipCoin()">Lancer la pièce</button>
+
+            <div class="history-box">
+                <div class="history-title">Historique</div>
+                <div class="history-list" id="historyList"></div>
+            </div>
         </article>
 
         <aside>
             <p>placeholder to add comment thread later</p>
         </aside>
+
+        <div class="bottom-link-container">
+            <a href="https://layrinhac01-creator.github.io/Mon-site-HolbertonSchool/" target="_blank" class="bottom-school-link">
+                🔗 Visiter le site Holberton School الرئيسي
+            </a>
+        </div>
     </main>
 
     <footer>
@@ -359,125 +302,49 @@
     </footer>
 
     <script>
-        const numbers = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26];
-        const wheel = document.getElementById('wheel');
-        const display = document.getElementById('display');
-        const spinBtn = document.getElementById('spinBtn');
-        const historyList = document.getElementById('history-list');
-        const degPerSlice = 360 / 37;
+        const coin = document.getElementById('coin');
+        const result = document.getElementById('result');
+        const flipBtn = document.getElementById('flipBtn');
+        const historyList = document.getElementById('historyList');
         let currentRotation = 0;
-        let lastNumbers = [];
 
-        function initWheel() {
-            if (!wheel) return;
-            wheel.innerHTML = "";
-            numbers.forEach((num, i) => {
-                const label = document.createElement('div');
-                label.className = 'number-label';
-                label.style.transform = `rotate(${(i * degPerSlice) + (degPerSlice / 2)}deg)`;
-                label.innerText = num;
-                wheel.appendChild(label);
-            });
-        }
+        function flipCoin() {
+            if (flipBtn) flipBtn.disabled = true;
+            if (result) result.innerText = "La pièce tourne...";
 
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        function playClick() {
-            const osc = audioCtx.createOscillator();
-            const g = audioCtx.createGain();
-            osc.connect(g); g.connect(audioCtx.destination);
-            osc.type = 'sine'; osc.frequency.setValueAtTime(160, audioCtx.currentTime);
-            g.gain.setValueAtTime(0.08, audioCtx.currentTime);
-            g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
-            osc.start(); osc.stop(audioCtx.currentTime + 0.08);
-        }function playWinSound() {
-            const now = audioCtx.currentTime;
-            const osc1 = audioCtx.createOscillator();
-            const gain1 = audioCtx.createGain();
-            osc1.connect(gain1); gain1.connect(audioCtx.destination);
-            osc1.type = 'sine';
-            osc1.frequency.setValueAtTime(300, now);
-            gain1.gain.setValueAtTime(0.1, now);
-            gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
-            osc1.start(now); osc1.stop(now + 0.1);
-
-            const osc2 = audioCtx.createOscillator();
-            const gain2 = audioCtx.createGain();
-            osc2.connect(gain2); gain2.connect(audioCtx.destination);
-            osc2.type = 'triangle';
-            osc2.frequency.setValueAtTime(587.33, now + 0.08);
-            gain2.gain.setValueAtTime(0.12, now + 0.08);
-            gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
-            osc2.start(now + 0.08); osc2.stop(now + 0.4);
-        }
-        function updateHistory(number, colorName) {
-            let colorHex = "#1a1a1a";
-            if (colorName === "ROUGE") colorHex = "#c0392b";
-            if (colorName === "VERT") colorHex = "#27ae60";
-
-            lastNumbers.unshift({ num: number, color: colorHex });
-            if (lastNumbers.length > 6) lastNumbers.pop();
-
-            historyList.innerHTML = "";
-            lastNumbers.forEach(item => {
-                const circle = document.createElement('div');
-                circle.className = 'history-item';
-                circle.style.background = item.color;
-                circle.innerText = item.num;
-                historyList.appendChild(circle);
-            });
-        }
-
-        function spin() {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            if (spinBtn) spinBtn.disabled = true;
-            if (display) {
-                display.innerText = "La bille tourne...";
-                display.style.color = "#f1c40f";
-            }
-
-            const winningIndex = Math.floor(Math.random() * 37);
-            const winningNumber = numbers[winningIndex];
-
-            const extraSpins = 6 * 360; 
-            const targetAngle = 360 - (winningIndex * degPerSlice);
+            const isPile = Math.random() < 0.5;
+            const baseTours = 1440;
+            const angleFinal = isPile ? 180 : 0;
             
-            currentRotation += extraSpins + (targetAngle - (currentRotation % 360)) - 4.86;
-            if (wheel) wheel.style.transform = `rotate(${currentRotation}deg)`;
-
-            let clicks = 0;
-            let currentDelay = 50;
-            let shouldPlaySound = true;
-
-            setTimeout(() => { shouldPlaySound = false; }, 5700);
-
-            function runSound() {
-                if (shouldPlaySound && clicks < 50) {
-                    playClick();
-                    clicks++;
-                    currentDelay += clicks * 0.45; 
-                    setTimeout(runSound, currentDelay);
-                }
-            }
-            runSound();
+            currentRotation += baseTours + (angleFinal - (currentRotation % 360));
+            
+            if (coin) coin.style.transform = `rotateY(${currentRotation}deg)`;
 
             setTimeout(() => {
-                let col = winningNumber === 0 ? "VERT" : ([1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36].includes(winningNumber) ? "ROUGE" : "NOIR");
-                
-                if (display) {
-                    if (col === "ROUGE") display.style.color = "#ff4d4d";
-                    else if (col === "VERT") display.style.color = "#2ecc71";
-                    else display.style.color = "#ffffff";
-
-                    display.innerText = `N° ${winningNumber} (${col})`;
+                if (result) {
+                    result.innerText = isPile ? "Résultat : PILE !" : "Résultat : FACE !";
                 }
 
-                updateHistory(winningNumber, col);
-                playWinSound();
-                if (spinBtn) spinBtn.disabled = false;
-            }, 6000); 
-        }
+                if (historyList) {
+                    const badge = document.createElement('div');
+                    if (isPile) {
+                        badge.className = 'history-badge badge-pile';
+                        badge.innerText = 'P';
+                    } else {
+                        badge.className = 'history-badge badge-face';
+                        badge.innerText = 'F';
+                    }
 
-        initWheel();
+                    historyList.insertBefore(badge, historyList.firstChild);
+
+                    if (historyList.children.length > 8) {
+                        historyList.removeChild(historyList.lastChild);
+                    }
+                }
+
+                if (flipBtn) flipBtn.disabled = false;
+            }, 1200);
+        }
     </script>
 </body>
 </html>
